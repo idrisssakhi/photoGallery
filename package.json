@@ -58,5 +58,6 @@
   "homepage": "https://github.com/idrisssakhi/photoGallery",
   "publishConfig": {
     "@idrisssakhi:registry": "https://npm.pkg.github.com"
-  }
+  },
+  "types": "./src/PhotoGallery.d.ts"
 }

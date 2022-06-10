@@ -13,8 +13,7 @@ export enum PhotoGalleryAuthorizationStatus {
   Blocked = 'blocked',
   NotDetermined = 'not-determined',
 }
-
-export interface PhotoGalleryPermissionModuleType {
+interface PhotoGalleryPermissionModuleType {
   checkPermission: (
     accessLevel: AccessLevel,
   ) => Promise<PhotoGalleryAuthorizationStatus>;

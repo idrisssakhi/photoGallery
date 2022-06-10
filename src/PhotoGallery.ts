@@ -119,7 +119,7 @@ export type Album = {
   count: number;
 };
 
-export interface PhotoGalleryInterface {
+interface PhotoGalleryInterface {
   saveToCameraRoll: (
     tag: string,
     options?: SaveToCameraRollOptions,
