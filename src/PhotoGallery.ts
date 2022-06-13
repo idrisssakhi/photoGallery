@@ -1,22 +1,10 @@
-import {Platform, NativeModules} from 'react-native';
+import { Platform, NativeModules } from 'react-native';
 
 export type AssetType = 'All' | 'Videos' | 'Photos';
 
-export type GroupTypes =
-  | 'Album'
-  | 'All'
-  | 'Event'
-  | 'Faces'
-  | 'Library'
-  | 'PhotoStream'
-  | 'SavedPhotos';
+export type GroupTypes = 'Album' | 'All' | 'Event' | 'Faces' | 'Library' | 'PhotoStream' | 'SavedPhotos';
 
-export type Include =
-  | 'filename'
-  | 'fileSize'
-  | 'location'
-  | 'imageSize'
-  | 'playableDuration';
+export type Include = 'filename' | 'fileSize' | 'location' | 'imageSize' | 'playableDuration';
 
 /**
  * Shape of the param arg for the `getPhotos` function.
@@ -58,7 +46,7 @@ export type GetPhotosParams = {
   /**
    * Latest time to get photos from. A timestamp in milliseconds. Inclusive.
    */
-  toTime?: Number;
+  toTime?: number;
 
   /**
    * Filter by mimetype (e.g. image/jpeg).
@@ -106,7 +94,7 @@ export type PhotoIdentifiersPage = {
 };
 
 export type SaveToCameraRollOptions = {
-  type?: 'photo' | 'video' | 'auto';
+  type: 'photo' | 'video';
   album?: string;
 };
 
@@ -120,53 +108,35 @@ export type Album = {
 };
 
 interface PhotoGalleryInterface {
-  saveToCameraRoll: (
-    tag: string,
-    options?: SaveToCameraRollOptions,
-  ) => Promise<string>;
+  saveToCameraRoll: (tag: string, options?: SaveToCameraRollOptions) => Promise<string>;
   getPhotos: (params: GetPhotosParams) => Promise<PhotoIdentifiersPage>;
   deletePhotos: (photoUris: Array<string>) => void;
   getAlbums(params: GetAlbumsParams): Promise<Album[]>;
 }
 
-const PhotoGalleryModule =
-  NativeModules.RNPhotoGallery as PhotoGalleryInterface;
+const PhotoGalleryModule = NativeModules.RNPhotoGallery as PhotoGalleryInterface;
 
 export class PhotoGallery {
-  static deletePhotos(photoUris: Array<string>) {
+  static deletePhotos(photoUris: Array<string>): void {
     return PhotoGalleryModule.deletePhotos(photoUris);
   }
 
-  static saveToCameraRoll(
-    tag: string,
-    options: SaveToCameraRollOptions,
-  ): Promise<string> {
-    let {type = 'auto', album = ''} = options;
-    if (tag === '') {
-      throw new Error('tag must be a valid string');
-    }
-    if (type === 'auto') {
-      if (tag.split('.') && ['mov', 'mp4'].indexOf(tag?.split('.')?.slice(-1)[0]) >= 0) {
-        type = 'video';
-      } else {
-        type = 'photo';
-      }
-    }
-    return PhotoGalleryModule.saveToCameraRoll(tag, {type, album});
+  static saveToCameraRoll(tag: string, options: SaveToCameraRollOptions): Promise<string> {
+    const { type = 'photo', album = '' } = options;
+    if (tag === '') throw new Error('tag must be a valid string');
+
+    return PhotoGalleryModule.saveToCameraRoll(tag, { type, album });
   }
-  static getAlbums(
-    params: GetAlbumsParams = {assetType: 'All'},
-  ): Promise<Album[]> {
+
+  static getAlbums(params: GetAlbumsParams = { assetType: 'All' }): Promise<Album[]> {
     return PhotoGalleryModule.getAlbums(params);
   }
   static getParamsWithDefaults(params: GetPhotosParams): GetPhotosParams {
-    const newParams = {...params};
-    if (!newParams.assetType) {
-      newParams.assetType = 'All';
-    }
-    if (!newParams.groupTypes && Platform.OS !== 'android') {
-      newParams.groupTypes = 'All';
-    }
+    const newParams = { ...params };
+    if (newParams.assetType === undefined) newParams.assetType = 'All';
+
+    if (newParams.groupTypes === undefined && Platform.OS !== 'android') newParams.groupTypes = 'All';
+
     return newParams;
   }
 
