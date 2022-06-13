@@ -117,31 +117,32 @@ interface PhotoGalleryInterface {
 const PhotoGalleryModule = NativeModules.RNPhotoGallery as PhotoGalleryInterface;
 
 export class PhotoGallery {
-  static deletePhotos(photoUris: Array<string>): void {
+  public deletePhotos(photoUris: Array<string>): void {
     return PhotoGalleryModule.deletePhotos(photoUris);
   }
 
-  static saveToCameraRoll(tag: string, options: SaveToCameraRollOptions): Promise<string> {
+  public saveToCameraRoll(tag: string, options: SaveToCameraRollOptions): Promise<string> {
     const { type = 'photo', album = '' } = options;
     if (tag === '') throw new Error('tag must be a valid string');
 
     return PhotoGalleryModule.saveToCameraRoll(tag, { type, album });
   }
 
-  static getAlbums(params: GetAlbumsParams = { assetType: 'All' }): Promise<Album[]> {
+  public getAlbums(params: GetAlbumsParams = { assetType: 'All' }): Promise<Album[]> {
     return PhotoGalleryModule.getAlbums(params);
   }
-  static getParamsWithDefaults(params: GetPhotosParams): GetPhotosParams {
+
+  public getPhotos(params: GetPhotosParams): Promise<PhotoIdentifiersPage> {
+    params = this.getParamsWithDefaults(params);
+    return PhotoGalleryModule.getPhotos(params);
+  }
+
+  private getParamsWithDefaults(params: GetPhotosParams): GetPhotosParams {
     const newParams = { ...params };
     if (newParams.assetType === undefined) newParams.assetType = 'All';
 
     if (newParams.groupTypes === undefined && Platform.OS !== 'android') newParams.groupTypes = 'All';
 
     return newParams;
-  }
-
-  static getPhotos(params: GetPhotosParams): Promise<PhotoIdentifiersPage> {
-    params = PhotoGallery.getParamsWithDefaults(params);
-    return PhotoGalleryModule.getPhotos(params);
   }
 }

@@ -55,21 +55,12 @@ RCT_EXPORT_MODULE()
 
 
 
-- (void)checkCameraRollPermission:(NSString *) accessLevel
-                         resolver:(void (^ _Nonnull)(RNPermissionStatus))resolve
-                         rejecter:(void (^ _Nonnull)(NSString *code, NSString *message))reject {
+- (void)checkCameraRollPermission:(void (^ _Nonnull)(RNPermissionStatus))resolve
+                   rejecter:(void (^ _Nonnull)(NSError * _Nonnull))reject {
   PHAuthorizationStatus status;
 
   if (@available(iOS 14.0, *)) {
-    PHAccessLevel requestedAccessLevel;
-    if ([accessLevel isEqualToString: ADD_ONLY]) {
-      requestedAccessLevel = PHAccessLevelAddOnly;
-    } else if ([accessLevel isEqualToString: READ_WRITE]) {
-      requestedAccessLevel = PHAccessLevelReadWrite;
-    } else {
-      reject(@"incorrect_access_level", @"The requested access level does not exist");
-    }
-    status = [PHPhotoLibrary authorizationStatusForAccessLevel:requestedAccessLevel];
+    status = [PHPhotoLibrary authorizationStatusForAccessLevel:PHAccessLevelReadWrite];
   } else {
     status = [PHPhotoLibrary authorizationStatus];
   }

@@ -77,7 +77,7 @@ RCT_ENUM_CONVERTER(PHAssetCollectionSubtype, (@{
 
 @implementation RNPhotoGallery
 
-RCT_EXPORT_MODULE(RNCCameraRoll)
+RCT_EXPORT_MODULE(RNPhotoGallery)
 
 @synthesize bridge = _bridge;
 
