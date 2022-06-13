@@ -12,7 +12,6 @@ interface PhotoGalleryPermissionModuleType {
   refreshPhotoSelection: () => Promise<boolean>;
   addListener: (eventType: string) => void;
   removeListeners: (count: number) => void;
-  getAssetInfo: (params: { id: string }) => Promise<void>;
 }
 
 const photoLibraryPermissionModule = NativeModules.PhotoGalleryPermissionModule as PhotoGalleryPermissionModuleType;

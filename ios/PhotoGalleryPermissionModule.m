@@ -182,22 +182,4 @@ RCT_REMAP_METHOD(refreshPhotoSelection,
   [self refreshLimitedPhotoselection:resolve rejecter:reject];
 }
 
-RCT_EXPORT_METHOD(getAssetInfo:(NSDictionary *)params
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject) {
-  // Converting the params from the user
-  NSString *assetId = [RCTConvert NSString:params[@"id"]] ?: @"";
-  
-  NSArray* localIds = [NSArray arrayWithObjects: assetId, nil];
-  PHAsset * _Nullable assets = [PHAsset fetchAssetsWithLocalIdentifiers:localIds options:nil].firstObject;
-  if (assets != nil) {
-    resolve(@{
-      @"response": @([assets duration])
-    });
-  } else {
-    reject(0, @"image not found", NULL);
-  }
-
-}
-
 @end

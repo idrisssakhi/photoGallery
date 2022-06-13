@@ -77,7 +77,7 @@ RCT_ENUM_CONVERTER(PHAssetCollectionSubtype, (@{
 
 @implementation RNPhotoGallery
 
-RCT_EXPORT_MODULE(RNPhotoGallery)
+RCT_EXPORT_MODULE()
 
 @synthesize bridge = _bridge;
 
@@ -86,13 +86,18 @@ static NSString *const kErrorUnableToLoad = @"E_UNABLE_TO_LOAD";
 
 static NSString *const kErrorAuthRestricted = @"E_PHOTO_LIBRARY_AUTH_RESTRICTED";
 static NSString *const kErrorAuthDenied = @"E_PHOTO_LIBRARY_AUTH_DENIED";
+static NSString *const kErrorAuthNotRequested = @"E_PHOTO_LIBRARY_AUTH_NOT_REQUESTED";
 
 typedef void (^PhotosAuthorizedBlock)(bool isLimited);
 
-static void requestPhotoLibraryAccess(RCTPromiseRejectBlock reject, PhotosAuthorizedBlock authorizedBlock) {
+static void checkPhotoLibraryAccess(RCTPromiseRejectBlock reject, PhotosAuthorizedBlock authorizedBlock, bool addOnly) {
   PHAuthorizationStatus authStatus;
   if (@available(iOS 14, *)) {
-    authStatus = [PHPhotoLibrary authorizationStatusForAccessLevel:PHAccessLevelReadWrite];
+    if (addOnly) {
+      authStatus = [PHPhotoLibrary authorizationStatusForAccessLevel:PHAccessLevelAddOnly];
+    } else {
+      authStatus = [PHPhotoLibrary authorizationStatusForAccessLevel:PHAccessLevelReadWrite];
+    }
   } else {
     authStatus = [PHPhotoLibrary authorizationStatus];
   }
@@ -106,15 +111,7 @@ static void requestPhotoLibraryAccess(RCTPromiseRejectBlock reject, PhotosAuthor
 #pragma clang diagnostic pop
     authorizedBlock(true);
   } else if (authStatus == PHAuthorizationStatusNotDetermined) {
-      if (@available(iOS 14, *)) {
-          [PHPhotoLibrary requestAuthorizationForAccessLevel:PHAccessLevelReadWrite handler:^(PHAuthorizationStatus status) {
-              requestPhotoLibraryAccess(reject, authorizedBlock);
-          }];
-      } else {
-          [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-              requestPhotoLibraryAccess(reject, authorizedBlock);
-          }];
-      }
+    reject(kErrorAuthNotRequested, @"Access to photo library was not asked yet", nil);
   } else {
     reject(kErrorAuthDenied, @"Access to photo library was denied", nil);
   }
@@ -199,8 +196,9 @@ RCT_EXPORT_METHOD(saveToCameraRoll:(NSURLRequest *)request
     inputURI = request.URL;
     saveWithOptions();
   };
+  
+  checkPhotoLibraryAccess(reject, loadBlock, true);
 
-  requestPhotoLibraryAccess(reject, loadBlock);
 }
 
 RCT_EXPORT_METHOD(getAlbums:(NSDictionary *)params
@@ -311,9 +309,18 @@ RCT_EXPORT_METHOD(getPhotos:(NSDictionary *)params
   BOOL __block stopCollections_;
   NSString __block *currentCollectionName;
 
-  requestPhotoLibraryAccess(reject, ^(bool isLimited){
+  checkPhotoLibraryAccess(reject, ^(bool isLimited){
     void (^collectAsset)(PHAsset*, NSUInteger, BOOL*) = ^(PHAsset * _Nonnull asset, NSUInteger assetIdx, BOOL * _Nonnull stopAssets) {
       NSString *const uri = [NSString stringWithFormat:@"ph://%@", [asset localIdentifier]];
+      
+      if (afterCursor && !foundAfter) {
+        if ([afterCursor isEqualToString:uri]) {
+          foundAfter = YES;
+        }
+        return;
+      }
+      
+      
       NSString *_Nullable originalFilename = NULL;
       PHAssetResource *_Nullable resource = NULL;
       NSNumber* fileSize = [NSNumber numberWithInt:0];
@@ -332,13 +339,6 @@ RCT_EXPORT_METHOD(getPhotos:(NSDictionary *)params
       // block and ensure the logic for `collectAssetMayOmitAsset` above is
       // updated
       if (collectAssetMayOmitAsset) {
-        if (afterCursor && !foundAfter) {
-          if ([afterCursor isEqualToString:uri]) {
-            foundAfter = YES;
-          }
-          return; // skip until we get to the first one
-        }
-
 
         if ([mimeTypes count] > 0 && resource) {
           CFStringRef const uti = (__bridge CFStringRef _Nonnull)(resource.uniformTypeIdentifier);
@@ -425,7 +425,7 @@ RCT_EXPORT_METHOD(getPhotos:(NSDictionary *)params
       RCTResolvePromise(resolve, assets, hasNextPage, isLimited);
       resolvedPromise = YES;
     }
-  });
+  }, false);
 }
 
 RCT_EXPORT_METHOD(deletePhotos:(NSArray<NSString *>*)assets
