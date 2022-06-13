@@ -1,11 +1,16 @@
+#import <Photos/Photos.h>
 
-#if __has_include("RCTBridgeModule.h")
-#import "RCTBridgeModule.h"
-#else
 #import <React/RCTBridgeModule.h>
-#endif
+#import <React/RCTConvert.h>
+
+@interface RCTConvert (PHFetchOptions)
+
++ (PHFetchOptions *)PHFetchOptionsFromMediaType:(NSString *)mediaType
+                                       fromTime:(NSUInteger)fromTime
+                                         toTime:(NSUInteger)toTime;
+
+@end
 
 @interface RNPhotoGallery : NSObject <RCTBridgeModule>
 
 @end
-  

@@ -1,5 +1,5 @@
 
-package com.photoGallery;
+package com.photogallery;
 
 import java.util.Arrays;
 import java.util.Collections;
