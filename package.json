@@ -6,6 +6,10 @@
   "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",
   "react-native": "src/index",
+  "files": [
+    "lib/",
+    "src/"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "typescript": "tsc --noEmit",
@@ -36,12 +40,10 @@
   "publishConfig": {
     "@idrisssakhi:registry": "https://npm.pkg.github.com"
   },
-  "peerDependencies": {
-    "react-native": "*"
-  },
   "devDependencies": {
     "react-native-builder-bob": "0.18.2",
     "react-native": "^0.66.0",
+    "react": "^17.0.2",
     "@babel/core": "7.12.9",
     "@babel/runtime": "7.12.5",
     "@react-native-community/eslint-config": "2.0.0",
@@ -56,6 +58,10 @@
     "metro-react-native-babel-preset": "0.67.0",
     "react-test-renderer": "17.0.2",
     "typescript": "4.4.4"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
   },
   "react-native-builder-bob": {
     "source": "src",

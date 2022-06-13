@@ -55,12 +55,22 @@ RCT_EXPORT_MODULE()
 
 
 
-- (void)checkCameraRollPermission:(void (^ _Nonnull)(RNPermissionStatus))resolve
-                   rejecter:(void (^ _Nonnull)(NSError * _Nonnull))reject {
+- (void)checkCameraRollPermission:(NSString *) accessLevel
+                         resolver:(void (^ _Nonnull)(RNPermissionStatus))resolve
+                         rejecter:(void (^ _Nonnull)(NSError * _Nonnull))reject {
   PHAuthorizationStatus status;
 
   if (@available(iOS 14.0, *)) {
-    status = [PHPhotoLibrary authorizationStatusForAccessLevel:PHAccessLevelReadWrite];
+    PHAccessLevel requestedAccessLevel;
+    if ([accessLevel isEqualToString: ADD_ONLY]) {
+      requestedAccessLevel = PHAccessLevelAddOnly;
+    } else if ([accessLevel isEqualToString: READ_WRITE]) {
+      requestedAccessLevel = PHAccessLevelReadWrite;
+    } else {
+      NSError *error = [NSError errorWithDomain:@"com.photoGallery.error" code:-99 userInfo:@{@"Error reason": @"Invalid Input"}];
+      return reject(error);
+    }
+    status = [PHPhotoLibrary authorizationStatusForAccessLevel:requestedAccessLevel];
   } else {
     status = [PHPhotoLibrary authorizationStatus];
   }
@@ -81,7 +91,7 @@ RCT_EXPORT_MODULE()
 }
 
 - (void)requestCameraRollReadWritePermission:(void (^ _Nonnull)(RNPermissionStatus))resolve
-                                    rejecter:(void (^ _Nonnull)(NSString *code, NSString *message))reject {
+                                    rejecter:(void (^ _Nonnull)(NSError * _Nonnull))reject {
   if (@available(iOS 14.0, *)) {
     [PHPhotoLibrary requestAuthorizationForAccessLevel:PHAccessLevelReadWrite handler:^(__unused PHAuthorizationStatus status) {
       [self checkCameraRollPermission: READ_WRITE resolver: resolve rejecter:reject];
@@ -94,9 +104,9 @@ RCT_EXPORT_MODULE()
 }
 
 - (void)requestCameraRollAddOnlyPermission:(void (^ _Nonnull)(RNPermissionStatus))resolve
-                                    rejecter:(void (^ _Nonnull)(NSString *code, NSString *message))reject {
+                                    rejecter:(void (^ _Nonnull)(NSError * _Nonnull))reject {
   if (@available(iOS 14.0, *)) {
-    [PHPhotoLibrary requestAuthorizationForAccessLevel:PHAccessLevelReadWrite handler:^(__unused PHAuthorizationStatus status) {
+    [PHPhotoLibrary requestAuthorizationForAccessLevel:PHAccessLevelAddOnly handler:^(__unused PHAuthorizationStatus status) {
       [self checkCameraRollPermission: ADD_ONLY resolver: resolve rejecter:reject];
     }];
   } else {
@@ -137,8 +147,8 @@ RCT_EXPORT_METHOD(checkPermission:
 
   [self checkCameraRollPermission:accessLevel resolver:^(RNPermissionStatus status) {
     resolve([self stringForStatus:status]);
-  } rejecter:^(NSString *code, NSString *message) {
-    reject(code, message, nil);
+  } rejecter:^(NSError *error) {
+    reject([NSString stringWithFormat:@"%ld", (long)error.code], error.localizedDescription, error);
   }];
 }
 
@@ -149,8 +159,8 @@ RCT_EXPORT_METHOD(requestReadWritePermission:
 
   [self requestCameraRollReadWritePermission:^(RNPermissionStatus status) {
     resolve([self stringForStatus:status]);
-  } rejecter:^(NSString *code, NSString *message) {
-    reject(code, message, nil);
+  } rejecter:^(NSError *error) {
+    reject([NSString stringWithFormat:@"%ld", (long)error.code], error.localizedDescription, error);
   }];
 }
 
@@ -160,8 +170,8 @@ RCT_EXPORT_METHOD(requestAddOnlyPermission:
 
   [self requestCameraRollAddOnlyPermission:^(RNPermissionStatus status) {
     resolve([self stringForStatus:status]);
-  } rejecter:^(NSString *code, NSString *message) {
-    reject(code, message, nil);
+  } rejecter:^(NSError *error) {
+    reject([NSString stringWithFormat:@"%ld", (long)error.code], error.localizedDescription, error);
   }];
 }
 
@@ -170,6 +180,24 @@ RCT_REMAP_METHOD(refreshPhotoSelection,
                  refreshLimitedPhotoselectionWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
   [self refreshLimitedPhotoselection:resolve rejecter:reject];
+}
+
+RCT_EXPORT_METHOD(getAssetInfo:(NSDictionary *)params
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+  // Converting the params from the user
+  NSString *assetId = [RCTConvert NSString:params[@"id"]] ?: @"";
+  
+  NSArray* localIds = [NSArray arrayWithObjects: assetId, nil];
+  PHAsset * _Nullable assets = [PHAsset fetchAssetsWithLocalIdentifiers:localIds options:nil].firstObject;
+  if (assets != nil) {
+    resolve(@{
+      @"response": @([assets duration])
+    });
+  } else {
+    reject(0, @"image not found", NULL);
+  }
+
 }
 
 @end

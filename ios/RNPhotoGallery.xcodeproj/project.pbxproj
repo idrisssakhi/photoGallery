@@ -27,6 +27,7 @@
 		134814201AA4EA6300B7C361 /* libRNPhotoGallery.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNPhotoGallery.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FFDE0D028576B200091637B /* PhotoGalleryPermissionModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoGalleryPermissionModule.h; sourceTree = "<group>"; };
 		2FFDE0D128576B390091637B /* PhotoGalleryPermissionModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoGalleryPermissionModule.m; sourceTree = "<group>"; };
+		2FFDE0D42857833F0091637B /* React */ = {isa = PBXFileReference; lastKnownFileType = folder; name = React; path = "../node_modules/react-native/React"; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* RNPhotoGallery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNPhotoGallery.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNPhotoGallery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNPhotoGallery.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -50,6 +51,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		2FFDE0D32857833F0091637B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2FFDE0D42857833F0091637B /* React */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
@@ -58,6 +67,7 @@
 				B3E7B5881CC2AC0600A0062D /* RNPhotoGallery.h */,
 				B3E7B5891CC2AC0600A0062D /* RNPhotoGallery.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
+				2FFDE0D32857833F0091637B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
