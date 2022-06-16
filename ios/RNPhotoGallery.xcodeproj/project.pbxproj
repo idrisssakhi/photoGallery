@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2FE5EC71285B9081003E3E8E /* AssetsLibraryRequestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE5EC70285B9081003E3E8E /* AssetsLibraryRequestHandler.m */; };
 		2FFDE0D228576B390091637B /* PhotoGalleryPermissionModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDE0D128576B390091637B /* PhotoGalleryPermissionModule.m */; };
 		B3E7B58A1CC2AC0600A0062D /* RNPhotoGallery.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNPhotoGallery.m */; };
 /* End PBXBuildFile section */
@@ -25,6 +26,8 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libRNPhotoGallery.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNPhotoGallery.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2FE5EC70285B9081003E3E8E /* AssetsLibraryRequestHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AssetsLibraryRequestHandler.m; sourceTree = "<group>"; };
+		2FE5EC72285B909D003E3E8E /* AssetsLibraryRequestHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssetsLibraryRequestHandler.h; sourceTree = "<group>"; };
 		2FFDE0D028576B200091637B /* PhotoGalleryPermissionModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoGalleryPermissionModule.h; sourceTree = "<group>"; };
 		2FFDE0D128576B390091637B /* PhotoGalleryPermissionModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoGalleryPermissionModule.m; sourceTree = "<group>"; };
 		2FFDE0D42857833F0091637B /* React */ = {isa = PBXFileReference; lastKnownFileType = folder; name = React; path = "../node_modules/react-native/React"; sourceTree = "<group>"; };
@@ -62,6 +65,8 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				2FE5EC72285B909D003E3E8E /* AssetsLibraryRequestHandler.h */,
+				2FE5EC70285B9081003E3E8E /* AssetsLibraryRequestHandler.m */,
 				2FFDE0D128576B390091637B /* PhotoGalleryPermissionModule.m */,
 				2FFDE0D028576B200091637B /* PhotoGalleryPermissionModule.h */,
 				B3E7B5881CC2AC0600A0062D /* RNPhotoGallery.h */,
@@ -129,6 +134,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FFDE0D228576B390091637B /* PhotoGalleryPermissionModule.m in Sources */,
+				2FE5EC71285B9081003E3E8E /* AssetsLibraryRequestHandler.m in Sources */,
 				B3E7B58A1CC2AC0600A0062D /* RNPhotoGallery.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
