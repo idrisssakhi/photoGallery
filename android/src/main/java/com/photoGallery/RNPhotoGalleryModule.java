@@ -57,7 +57,7 @@ import javax.annotation.Nullable;
  * {@link NativeModule} that allows JS to interact with the photos and videos on the device (i.e.
  * {@link MediaStore.Images}).
  */
-@ReactModule(name = PhotoGalleryModule.NAME)
+@ReactModule(name = RNPhotoGalleryModule.NAME)
 public class RNPhotoGalleryModule extends ReactContextBaseJavaModule {
 
     public static final String NAME = "RNPhotoGallery";
