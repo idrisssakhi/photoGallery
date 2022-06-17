@@ -95,8 +95,10 @@ interface PhotoGalleryInterface {
   getPhotoByInternalID(internalID: string, options?: PhotoConvertionOptions): Promise<PhotoIdentifier>;
 }
 
-const PhotoGalleryModule = NativeModules.PhotoGallery as PhotoGalleryInterface;
+const PhotoGalleryModule = NativeModules.RNPhotoGallery as PhotoGalleryInterface;
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+if (PhotoGalleryModule == null) console.error("PhotoGallery: Native Module 'PhotoGalleryModule' was null! Did you run pod install?");
 export class PhotoGallery {
   static deletePhotos(photoUris: Array<string>): void {
     return PhotoGalleryModule.deletePhotos(photoUris);
