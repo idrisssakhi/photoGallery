@@ -1,13 +1,14 @@
 {
   "name": "react-native-photo-gallery-api",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "React native API to extract media files (images and videos)",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",
-  "react-native": "src/index",
+  "react-native": "src/index.ts",
+  "source": "src/index",
   "files": [
-    "sr/c",
+    "src/",
     "lib/",
     "android/",
     "ios/",
@@ -15,12 +16,14 @@
     "README.md"
   ],
   "scripts": {
+    "prepare": "bob build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "typescript": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "lint-ci": "yarn lint -f ./node_modules/@firmnav/eslint-github-actions-formatter/dist/formatter.js",
     "build": "bob build",
-    "check-js": "yarn lint --fix && yarn typescript"
+    "check-js": "yarn lint --fix && yarn typescript",
+    "bootstrap": "yarn && cd example && yarn && yarn setup && yarn pods"
   },
   "keywords": [
     "react-native",

@@ -1,20 +1,14 @@
 import { NativeEventEmitter, NativeModules } from 'react-native';
 
 /** Defines ios permission access levels for gallery */
-export type AccessLevel = 'addOnly' | 'readWrire';
+export type AccessLevel = 'addOnly' | 'readWrite';
 
 export type PhotoGalleryAuthorizationStatus = 'granted' | 'limited' | 'denied' | 'unavailable' | 'blocked' | 'not-determined';
 
-interface PhotoGalleryPermissionModuleType {
-  checkPermission: (accessLevel: AccessLevel) => Promise<PhotoGalleryAuthorizationStatus>;
-  requestReadWritePermission: () => Promise<PhotoGalleryAuthorizationStatus>;
-  requestAddOnlyPermission: () => Promise<PhotoGalleryAuthorizationStatus>;
-  refreshPhotoSelection: () => Promise<boolean>;
-  addListener: (eventType: string) => void;
-  removeListeners: (count: number) => void;
-}
-
-const photoLibraryPermissionModule = NativeModules.PhotoGalleryPermissionModule as PhotoGalleryPermissionModuleType;
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const photoLibraryPermissionModule = NativeModules.PhotoGalleryPermissionModule;
+if (photoLibraryPermissionModule == null)
+  console.error("photoLibraryPermissionModule: Native Module 'photoLibraryPermissionModule' was null! Did you run pod install?");
 
 export const photoLibraryEventEmitter = new NativeEventEmitter(photoLibraryPermissionModule);
 

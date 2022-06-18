@@ -199,7 +199,7 @@ RCT_EXPORT_METHOD(saveToCameraRoll:(NSURLRequest *)request
     saveWithOptions();
   };
   
-  checkPhotoLibraryAccess(reject, loadBlock, true);
+  checkPhotoLibraryAccess(reject, loadBlock, [options[@"album"] isEqualToString:@""]);
 
 }
 

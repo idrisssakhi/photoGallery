@@ -71,11 +71,11 @@ On react-native-cli or ejected apps, adding the following lines will add the cap
 
 ### Methods
 
-* [`saveToCameraRoll`](#save)
+* [`saveToCameraRoll`](#saveToCameraRoll)
 * [`getAlbums`](#getalbums)
 * [`getPhotos`](#getphotos)
 * [`deletePhotos`](#deletephotos)
-* `iosGetImageDataById`(#iosGetImageDataById)
+* [`iosGetImageDataById`](#iosGetImageDataById)
 
 ---
 
@@ -86,7 +86,7 @@ On react-native-cli or ejected apps, adding the following lines will add the cap
 ### `saveToCameraRoll()`
 
 ```javascript
-PhotoGallery.save(tag, { type, album })
+PhotoGallery.saveToCameraRoll(tag, { type, album })
 ```
 
 Saves the photo or video to the photo library.
@@ -198,6 +198,35 @@ Returns a Promise which when resolved will be of the following shape:
   * `end_cursor`: {string}
 * `limited` : {boolean | undefined} : true if the app can only access a subset of the gallery pictures (authorization is `PHAuthorizationStatusLimited`), false otherwise (iOS only)
 
+### `iosGetImageDataById()`
+```javascript
+PhotoGallery.iosGetImageDataById(internalID, true);
+```
+
+Returns a Promise which when resolved will be of the following shape:
+
+* `node`: {object} An object with the following shape:
+  * `type`: {string}
+  * `group_name`: {string}
+  * `image`: {object} : An object with the following shape:
+    * `uri`: {string}
+    * `filePath`: {string}
+    * `filename`: {string | null} : Only set if the `include` parameter contains `filename`
+    * `height`: {number | null} : Only set if the `include` parameter contains `imageSize`
+    * `width`: {number | null} : Only set if the `include` parameter contains `imageSize`
+    * `fileSize`: {number | null} : Only set if the `include` parameter contains `fileSize`
+    * `playableDuration`: {number | null} : Only set for videos if the `include` parameter contains `playableDuration`. Will be null for images.
+  * `timestamp`: {number}
+  * `location`: {object | null} : Only set if the `include` parameter contains `location`. An object with the following shape:
+    * `latitude`: {number}
+    * `longitude`: {number}
+    * `altitude`: {number}
+    * `heading`: {number}
+    * `speed`: {number}
+
+second Parameters is Boolean to tell whether to convert HEIC images to JPEG in order to send to back-end.
+
+Returns a Promise with photo identifier objects from the local camera roll of the device matching shape defined by `getPhotosReturnChecker`.
 
 ## Usage
 
@@ -734,3 +763,9 @@ export const useImageTools = (): ImageToolsLogic => {
 };
 
 ```
+
+### Known issues
+
+#### IOS
+
+If you try to save media into specific album without asking for read and write permission then saving will not work, workaround is to not precice album name for IOS if you don't want to request full permission (Only ios >= 14).
