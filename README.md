@@ -52,6 +52,8 @@ The user's permission is required in order to access the Camera Roll on devices 
 
 If you are targeting devices running iOS 11 or later, you will also need to add the `NSPhotoLibraryAddUsageDescription` key in your `Info.plist`. Use this key to define a string that describes how your app will use this data. By adding this key to your `Info.plist`, you will be able to request write-only access permission from the user. If you try to save to the camera roll without this permission, your app will exit.
 
+for IOS >= 14 you need to add `PHPhotoLibraryPreventAutomaticLimitedAccessAlert` to info.plist to avoid the native pop up that asks user to modify selection each time when PHAuthorization equal to limited.
+
 **Android**
 
 Permission is required to read and write to the external storage.
