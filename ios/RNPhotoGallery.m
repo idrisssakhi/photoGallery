@@ -506,14 +506,14 @@ RCT_EXPORT_METHOD(getPhotoByInternalID:(NSString *)internalId
       NSString *const uniformMimeType = resource.uniformTypeIdentifier;
       
       __block NSString *filePath = @"";
-      NSNumber* fileSize = [resource valueForKey:@"fileSize"];
 
       // check if HEIC extension asset
       if (convertHeic && asset.mediaType == PHAssetMediaTypeImage && [uniformMimeType  isEqual: @"public.heic"]) {
         // convert to JPEG
         PHImageRequestOptions *const requestOptions = [PHImageRequestOptions new];
         requestOptions.networkAccessAllowed = YES;
-          requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeFastFormat;
+        requestOptions.version = PHImageRequestOptionsVersionUnadjusted;
+        requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
 
           CGSize const targetSize = CGSizeMake((CGFloat)asset.pixelWidth, (CGFloat)asset.pixelHeight);
           [[PHImageManager defaultManager] requestImageForAsset:asset
@@ -532,6 +532,8 @@ RCT_EXPORT_METHOD(getPhotoByInternalID:(NSString *)internalId
           NSFileManager *fileManager = [NSFileManager defaultManager];
           NSString *fullPath = [NSTemporaryDirectory() stringByAppendingPathComponent:originalFilename];
           if ([fileManager createFileAtPath:fullPath contents:imageData attributes:nil]) {
+            unsigned long long fileSize = [[fileManager attributesOfItemAtPath:fullPath error:nil] fileSize];
+
             resolve(@{
                       @"node": @{
                           @"type": assetMediaTypeLabel,
@@ -542,7 +544,7 @@ RCT_EXPORT_METHOD(getPhotoByInternalID:(NSString *)internalId
                               @"width": @([asset pixelWidth]),
                               @"isStored": @YES,
                               @"playableDuration": @([asset duration]), // fractional seconds
-                              @"fileSize": fileSize
+                              @"fileSize": @(fileSize)
                               },
                           @"timestamp": @(asset.creationDate.timeIntervalSince1970),
                           @"location": (loc ? @{
@@ -562,6 +564,7 @@ RCT_EXPORT_METHOD(getPhotoByInternalID:(NSString *)internalId
 
         }];
       } else {
+        NSNumber* fileSize = [resource valueForKey:@"fileSize"];
         PHContentEditingInputRequestOptions *const editOptions = [PHContentEditingInputRequestOptions new];
         // Download asset if on icloud.
         editOptions.networkAccessAllowed = YES;
