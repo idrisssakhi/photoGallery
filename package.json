@@ -1,6 +1,6 @@
 {
   "name": "react-native-photo-gallery-api",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "React native API to extract media files (images and videos)",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
