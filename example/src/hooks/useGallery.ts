@@ -1,4 +1,3 @@
-import React from 'react';
 import {useCallback, useEffect, useState} from 'react';
 
 import {AppState, EmitterSubscription} from 'react-native';
@@ -71,8 +70,8 @@ export const useGallery = ({
         mimeTypes: mimeTypeFilter,
         ...(isAndroid && {include: ['fileSize', 'filename']}),
       });
-      const photos = convertCameraRollPicturesToImageDtoType(edges);
-      setPhotos(prev => [...(prev ?? []), ...photos]);
+      const convertedPhotos = convertCameraRollPicturesToImageDtoType(edges);
+      setPhotos(prev => [...(prev ?? []), ...convertedPhotos]);
 
       setNextCursor(page_info.end_cursor);
       setHasNextPage(page_info.has_next_page);

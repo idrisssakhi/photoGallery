@@ -87,17 +87,8 @@ export interface PhotoConvertionOptions {
   convertHeicImages: boolean;
 }
 
-interface PhotoGalleryInterface {
-  saveToCameraRoll: (tag: string, options?: SaveToCameraRollOptions) => Promise<string>;
-  getPhotos: (params: GetPhotosParams) => Promise<PhotoIdentifiersPage>;
-  deletePhotos: (photoUris: Array<string>) => void;
-  getAlbums(params: GetAlbumsParams): Promise<Album[]>;
-  getPhotoByInternalID(internalID: string, options?: PhotoConvertionOptions): Promise<PhotoIdentifier>;
-}
+const { RNPhotoGallery: PhotoGalleryModule } = NativeModules;
 
-const PhotoGalleryModule = NativeModules.RNPhotoGallery as PhotoGalleryInterface;
-
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 if (PhotoGalleryModule == null) console.error("PhotoGallery: Native Module 'PhotoGalleryModule' was null! Did you run pod install?");
 export class PhotoGallery {
   static deletePhotos(photoUris: Array<string>): void {
@@ -116,8 +107,8 @@ export class PhotoGallery {
   }
 
   static getPhotos(params: GetPhotosParams): Promise<PhotoIdentifiersPage> {
-    params = this.getParamsWithDefaults(params);
-    return PhotoGalleryModule.getPhotos(params);
+    const newParams = this.getParamsWithDefaults(params);
+    return PhotoGalleryModule.getPhotos(newParams);
   }
 
   static iosGetImageDataById(internalID: string, convertHeicImages?: boolean): Promise<PhotoIdentifier> {

@@ -1,5 +1,5 @@
 
-package com.photogallery;
+package com.photo.gallery;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -36,7 +36,6 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.common.ReactConstants;
-import com.facebook.react.module.annotations.ReactModule;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,7 +56,6 @@ import javax.annotation.Nullable;
  * {@link NativeModule} that allows JS to interact with the photos and videos on the device (i.e.
  * {@link MediaStore.Images}).
  */
-@ReactModule(name = RNPhotoGalleryModule.NAME)
 public class RNPhotoGalleryModule extends ReactContextBaseJavaModule {
 
     public static final String NAME = "RNPhotoGallery";

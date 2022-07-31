@@ -1,5 +1,13 @@
 import React, {useMemo} from 'react';
-import {ActivityIndicator, Dimensions, Modal, SafeAreaView, Text, TouchableOpacity} from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  Modal,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import {useGalleryPermission} from '../hooks';
 import {ImageList} from './ImageList/ImageList';
 
@@ -20,33 +28,34 @@ export const GalleryModal = ({visible, onCloseRequested}: Props) => {
 
   const isPermittedToAccessGallery = useMemo(
     () =>
-      readPermissionStatus === 'limited' ||
-      readPermissionStatus === 'granted',
+      readPermissionStatus === 'limited' || readPermissionStatus === 'granted',
     [readPermissionStatus],
   );
 
   return (
     <Modal
-      animationType="fade"
-      presentationStyle="overFullScreen"
-      statusBarTranslucent 
-      visible={visible} 
+      animationType="slide"
+      presentationStyle="formSheet"
+      statusBarTranslucent
+      visible={visible}
       onRequestClose={onCloseRequested}>
-        <SafeAreaView>
+      <SafeAreaView style={style.container}>
         <TouchableOpacity onPress={onCloseRequested}>
           <Text>Close</Text>
         </TouchableOpacity>
-      {isLoading && <ActivityIndicator color={'grey'} size="large" />}
-      {isPermittedToAccessGallery && (
-        <ImageList
-          cardSideLength={imageCardSideLength}
-          numColumns={columnsCount}
-          isLimitedPhotosSelected={
-            readPermissionStatus === 'limited'
-          }
-        />
-      )}
+        {isLoading && <ActivityIndicator color={'grey'} size="large" />}
+        {isPermittedToAccessGallery && (
+          <ImageList
+            cardSideLength={imageCardSideLength}
+            numColumns={columnsCount}
+            isLimitedPhotosSelected={readPermissionStatus === 'limited'}
+          />
+        )}
       </SafeAreaView>
     </Modal>
   );
 };
+
+const style = StyleSheet.create({
+  container: {flex: 1, paddingVertical: 60, paddingHorizontal: 24},
+});
