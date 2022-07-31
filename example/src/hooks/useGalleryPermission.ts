@@ -1,4 +1,3 @@
-import React from 'react';
 import {useCallback, useEffect, useState} from 'react';
 import {AppState, PermissionsAndroid} from 'react-native';
 

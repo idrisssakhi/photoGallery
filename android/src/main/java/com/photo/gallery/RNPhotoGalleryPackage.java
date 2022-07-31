@@ -1,5 +1,5 @@
 
-package com.photogallery;
+package com.photo.gallery;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,10 +10,11 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.facebook.react.bridge.JavaScriptModule;
+
 public class RNPhotoGalleryPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-      return Arrays.<NativeModule>asList(new RNPhotoGalleryModule(reactContext));
+      return Arrays.asList(new RNPhotoGalleryModule(reactContext));
     }
 
     // Deprecated from RN 0.47

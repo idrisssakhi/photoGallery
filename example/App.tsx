@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import {
   SafeAreaView,
   StatusBar,
-  StyleSheet,
   TouchableOpacity,
   useColorScheme,
   Text,
+  StyleSheet,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -24,7 +24,7 @@ const App = () => {
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView style={[backgroundStyle, style.container]}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <TouchableOpacity onPress={toggleGallery}>
         <Text>Open Gallery</Text>
@@ -37,22 +37,12 @@ const App = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+const style = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flex: 1,
+    padding: 24,
+    backgroundColor: 'yellow',
   },
 });
 

@@ -54,7 +54,8 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allow App to access to your storage to select pictures.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>App would like to access your device's storage to save media files on your device</string>
+	<string>Application would like to access your device's storage to save media files on your device</string>
 	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
+	<true/>
 </dict>
 </plist>

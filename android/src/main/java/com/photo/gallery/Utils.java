@@ -1,4 +1,4 @@
-package com.photogallery;
+package com.photo.gallery;
 
 import android.webkit.MimeTypeMap;
 
