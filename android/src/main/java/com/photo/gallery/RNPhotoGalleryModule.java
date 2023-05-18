@@ -152,8 +152,13 @@ public class RNPhotoGalleryModule extends ReactContextBaseJavaModule {
                     mediaDetails.put(Images.Media.DISPLAY_NAME, source.getName());
                     mediaDetails.put(Images.Media.IS_PENDING, 1);
                     ContentResolver resolver = mContext.getContentResolver();
-                    Uri mediaContentUri = resolver
-                            .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, mediaDetails);
+                    // Uri mediaContentUri = resolver
+                    //         .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, mediaDetails);
+
+                    Uri mediaContentUri = isVideo    
+                        ? resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, mediaDetails)
+                        : resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, mediaDetails);
+
                     output = resolver.openOutputStream(mediaContentUri);
                     input = new FileInputStream(source);
                     FileUtils.copy(input, output);
