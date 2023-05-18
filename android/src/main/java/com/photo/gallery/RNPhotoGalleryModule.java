@@ -687,7 +687,11 @@ public class RNPhotoGalleryModule extends ReactContextBaseJavaModule {
                                 + photoUri.toString(),
                         e);
             }
-            retriever.release();
+            try {
+                retriever.release();
+            } catch (IOException e) {
+                // Do nothing. We can't handle this, and this is usually a system problem
+            }
         }
 
         if (photoDescriptor != null) {
@@ -754,7 +758,11 @@ public class RNPhotoGalleryModule extends ReactContextBaseJavaModule {
                                         + photoUri.toString(),
                                 e);
                     }
-                    retriever.release();
+                    try {
+                        retriever.release();
+                    } catch (IOException e) {
+                        // Do nothing. We can't handle this, and this is usually a system problem
+                    }
                 } else {
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     // Set inJustDecodeBounds to true so we don't actually load the Bitmap, but only get its
