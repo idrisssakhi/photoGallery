@@ -155,7 +155,7 @@ public class RNPhotoGalleryModule extends ReactContextBaseJavaModule {
                     // Uri mediaContentUri = resolver
                     //         .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, mediaDetails);
 
-                    Uri mediaContentUri = isVideo    
+                    Uri mediaContentUri = "video".equals(mOptions.getString("type"))    
                         ? resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, mediaDetails)
                         : resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, mediaDetails);
 
