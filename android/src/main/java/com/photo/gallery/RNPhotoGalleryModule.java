@@ -152,8 +152,13 @@ public class RNPhotoGalleryModule extends ReactContextBaseJavaModule {
                     mediaDetails.put(Images.Media.DISPLAY_NAME, source.getName());
                     mediaDetails.put(Images.Media.IS_PENDING, 1);
                     ContentResolver resolver = mContext.getContentResolver();
-                    Uri mediaContentUri = resolver
-                            .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, mediaDetails);
+                    // Uri mediaContentUri = resolver
+                    //         .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, mediaDetails);
+
+                    Uri mediaContentUri = "video".equals(mOptions.getString("type"))    
+                        ? resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, mediaDetails)
+                        : resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, mediaDetails);
+
                     output = resolver.openOutputStream(mediaContentUri);
                     input = new FileInputStream(source);
                     FileUtils.copy(input, output);
@@ -687,7 +692,11 @@ public class RNPhotoGalleryModule extends ReactContextBaseJavaModule {
                                 + photoUri.toString(),
                         e);
             }
-            retriever.release();
+            try {
+                retriever.release();
+            } catch (IOException e) {
+                // Do nothing. We can't handle this, and this is usually a system problem
+            }
         }
 
         if (photoDescriptor != null) {
@@ -754,7 +763,11 @@ public class RNPhotoGalleryModule extends ReactContextBaseJavaModule {
                                         + photoUri.toString(),
                                 e);
                     }
-                    retriever.release();
+                    try {
+                        retriever.release();
+                    } catch (IOException e) {
+                        // Do nothing. We can't handle this, and this is usually a system problem
+                    }
                 } else {
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     // Set inJustDecodeBounds to true so we don't actually load the Bitmap, but only get its
